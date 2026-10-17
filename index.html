@@ -30,7 +30,8 @@ body:before{content:"";position:fixed;inset:0;z-index:3;pointer-events:none;opac
 @media(max-width:760px){.profiles{gap:38px}.portrait{width:min(235px,72.9%)}.gallery-item,.gallery-item:nth-child(n){flex-basis:83%;height:380px}.event{width:100%;min-height:280px}.clock>div{width:calc(25% - 8px);padding:17px 4px}.clock{gap:8px}.clock strong{font-size:30px}.venue{grid-template-columns:1fr}.venue-image{min-height:270px}}
 @media(max-width:460px){.im-couple-profile__connector{display:none}.date-grid{gap:9px}.date-tile{width:29vw;max-width:120px;border-radius:24px}.date-tile strong{font-size:34px}.date-tile:before{font-size:39px}.gallery-item,.gallery-item:nth-child(n){flex-basis:90%;height:330px}.event{width:100%}.clock>div{width:25%}.clock strong{font-size:25px}.clock span{letter-spacing:.08em}.venue-copy{padding:36px 24px}}
 /* Local photo crops, ornamental flourishes and invitation interactions */
-.intro,.gallery,.functions,.countdown,.couple,.date-section{overflow:hidden}.intro:after,.gallery:before{content:"";position:absolute;width:210px;height:210px;background:url('assets/mandala.svg') center/contain no-repeat;opacity:.22;pointer-events:none}.intro:after{right:-45px;top:35px}.gallery:before{left:-45px;bottom:20px}
+.intro,.gallery,.functions,.countdown,.couple{overflow:hidden}
+.date-section{overflow:visible}.intro:after,.gallery:before{content:"";position:absolute;width:210px;height:210px;background:url('assets/mandala.svg') center/contain no-repeat;opacity:.22;pointer-events:none}.intro:after{right:-45px;top:35px}.gallery:before{left:-45px;bottom:20px}
 .portrait{background-image:url('assets/wedding-contact-sheet.png');background-size:300% 200%;background-position:0 0}.profile:nth-child(2) .portrait{background-position:50% 0}.portrait img{display:none}
 .gallery-item{position:relative;background-image:url('assets/wedding-contact-sheet.png');background-size:300% 200%;background-repeat:no-repeat}.gallery-item img{display:none}.gallery-item:nth-child(1){background-position:100% 0}.gallery-item:nth-child(2){background-position:0 100%}.gallery-item:nth-child(3){background-position:50% 100%}.gallery-item:nth-child(4){background-position:100% 100%}.gallery-item:nth-child(5){background-position:0 0}.gallery-item:nth-child(6){background-position:50% 0}
 .gallery-nav{display:flex;align-items:center;justify-content:center;gap:13px;margin:12px auto 4px}.gallery-nav button{width:42px;height:42px;border:1px solid #d8c58e;background:#fffaf0;border-radius:50%;color:#9d7941;cursor:pointer}.gallery-nav .dots{display:flex;gap:7px;align-items:center}.gallery-nav .dot{width:7px;height:7px;border:0;padding:0;background:#e8dcc1}.gallery-nav .dot.active{width:24px;border-radius:9px;background:#c3a052}
@@ -44,10 +45,10 @@ body:before{content:"";position:fixed;inset:0;z-index:3;pointer-events:none;opac
 @media(max-width:760px){.gallery-item,.gallery-item:nth-child(n){flex-basis:70vw;height:360px}}.event{width:420px;min-height:560px;height:560px;align-self:center}
 .event:nth-child(1) .event-photo{background-image:url('assets/wedding-event.webp');background-size:cover;background-position:center}
 /* Let each venue poster overlap the lower edge of its event image */
-.functions{overflow:visible}.event-grid{gap:140px}.event{overflow:visible}.event-photo{overflow:hidden;border-radius:22px}.event:after{border-radius:22px;pointer-events:none}.event-content{position:absolute;inset:0;bottom:auto;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:26px 22px 155px}.event-content .im-event-poster__venue{position:absolute;top:78%;left:18px;right:18px;z-index:40;margin:0!important;background-color:rgba(255,255,255,0.4);border:1px solid rgba(231,201,169,0.6);border-radius:14px;padding:16px 18px;min-height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;backdrop-filter:blur(4px);overflow:hidden}
-.event-content .im-event-poster__venue .im-event-poster__name{position:relative;font-size:34px;line-height:1.02;margin:0;padding:0;color:#3a2f28}
-.event-content .im-event-poster__venue .event-date{position:relative;font-size:12px;line-height:1;letter-spacing:.18em;text-transform:uppercase;color:#3a2f28;margin:0}
-.event-content .im-event-poster__venue .event-time{position:relative;font-size:16px;line-height:1;margin:0;color:#3a2f28;font-style:italic}.event:nth-child(1) .event-photo{background-image:url('assets/wedding-event.webp');background-size:cover;background-position:center}
+.functions{overflow:visible}.event-grid{gap:140px}.event{overflow:visible}.event-photo{overflow:hidden;border-radius:22px}.event:after{border-radius:22px;pointer-events:none}.event-content{position:absolute;inset:0;bottom:auto;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:26px 22px 155px}.event-photo .im-event-poster__venue{position:absolute;left:18px;right:18px;bottom:18px;z-index:6;margin:0!important;background-color:rgba(255,255,255,0.4);border:1px solid rgba(231,201,169,0.6);border-radius:14px;padding:14px 16px;min-height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;backdrop-filter:blur(4px);overflow:hidden}
+.event-photo .im-event-poster__venue .im-event-poster__name{position:relative;font-size:34px;line-height:1.02;margin:0;padding:0;color:#3a2f28}
+.event-photo .im-event-poster__venue .event-date{position:relative;font-size:12px;line-height:1;letter-spacing:.18em;text-transform:uppercase;color:#3a2f28;margin:0}
+.event-photo .im-event-poster__venue .event-time{position:relative;font-size:16px;line-height:1;margin:0;color:#3a2f28;font-style:italic}.event:nth-child(1) .event-photo{background-image:url('assets/wedding-event.webp');background-size:cover;background-position:center}
 .event:nth-child(2) .event-photo{background-image:url('assets/haldi-event.webp');background-size:cover;background-position:center}.event:nth-child(3) .event-photo{background-image:url('assets/sangeet-event.webp');background-size:cover;background-position:center}
 .event:nth-child(4) .event-photo{background-image:url('assets/wedding-event.webp');background-size:cover;background-position:center}
 .event:nth-child(5) .event-photo{background-image:url('assets/reception.webp');background-size:cover;background-position:center}/* Remove the leafy wreath overlay from the couple portraits */
@@ -76,7 +77,7 @@ body.intro-pending{overflow:hidden}
 .scratch-defs{position:absolute;width:0;height:0;overflow:hidden}
 /* default layout: centered single-row */
 .date-grid{display:flex;justify-content:center;gap:32px;flex-wrap:nowrap;align-items:center;max-width:980px;margin:0 auto;padding-inline:16px;--heart-basis:28%}
-.im-heart-scratch__group{flex:0 1 var(--heart-basis);max-width:260px;min-width:70px;opacity:1;display:flex;justify-content:center}
+.im-heart-scratch__group{flex:0 1 var(--heart-basis);max-width:260px;min-width:70px;opacity:1;display:flex;justify-content:center;position:relative;z-index:200}
 .im-heart-scratch__glow{width:100%;height:100%;filter:drop-shadow(0 0 8px #d7ad67aa) drop-shadow(0 8px 16px #7b242233);animation:heartGlow 2.1s ease-in-out var(--im-heart-delay,0s) infinite alternate}
 /* clip the glow to the heart shape so shadow is heart-shaped */
 .im-heart-scratch__glow{mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 156 146' preserveAspectRatio='xMidYMid meet'><path d='M78 137C68 127 12 90 12 49 12 25 28 10 47 10c15 0 25 8 31 20 6-12 16-20 31-20 19 0 35 15 35 39 0 41-56 78-66 88Z' fill='white'/></svg>") no-repeat;mask-size:contain;mask-position:center;-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 156 146' preserveAspectRatio='xMidYMid meet'><path d='M78 137C68 127 12 90 12 49 12 25 28 10 47 10c15 0 25 8 31 20 6-12 16-20 31-20 19 0 35 15 35 39 0 41-56 78-66 88Z' fill='white'/></svg>") no-repeat;-webkit-mask-size:contain;-webkit-mask-position:center}
@@ -84,7 +85,7 @@ body.intro-pending{overflow:hidden}
 .im-heart-scratch__content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;pointer-events:none}
 .im-heart-scratch__label{font:400 clamp(10px,1.6vw,12px) var(--sans);color:#8a7060}
 .im-heart-scratch__value{font:600 clamp(24px,5.5vw,38px) 'Cormorant Garamond',Georgia,serif;color:#8b1a1a;line-height:1}
-.im-heart-scratch__canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.im-heart-scratch__canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;display:block;z-index:220}
 /* Mask the canvas to the heart shape so scratching matches the heart */
 .im-heart-scratch__canvas{mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 156 146' preserveAspectRatio='xMidYMid meet'><path d='M78 137C68 127 12 90 12 49 12 25 28 10 47 10c15 0 25 8 31 20 6-12 16-20 31-20 19 0 35 15 35 39 0 41-56 78-66 88Z' fill='white'/></svg>") no-repeat;mask-size:contain;mask-position:center;-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 156 146' preserveAspectRatio='xMidYMid meet'><path d='M78 137C68 127 12 90 12 49 12 25 28 10 47 10c15 0 25 8 31 20 6-12 16-20 31-20 19 0 35 15 35 39 0 41-56 78-66 88Z' fill='white'/></svg>") no-repeat;-webkit-mask-size:contain;-webkit-mask-position:center}
 .im-heart-scratch__canvas:active{cursor:grabbing}
@@ -102,6 +103,7 @@ body.intro-pending{overflow:hidden}
   .im-heart-scratch__group{min-width:64px}
   .im-heart-scratch__value{font-size:28px}
   .date-section .section-head{padding-inline:10px}
+  .im-heart-scratch__heart{min-height:120px}
 }
 @media (max-width:360px){
   .date-grid{gap:14px;--heart-basis:36%}
@@ -241,14 +243,14 @@ events.forEach(([name,date,time,place,img])=>{
   a.className='event';
   const imgSrc = img ? 'assets/' + encodeURI(img) : 'assets/wedding-contact-sheet.png';
   a.innerHTML = `
-    <div class="event-photo" style="background-image:url('${imgSrc}');background-size:cover;background-position:center;border-radius:22px;overflow:hidden"></div>
-    <div class="event-content">
-      <div class="im-event-poster__venue" style="background-color: rgba(255,255,255,0.4);border: 1px solid rgba(231,201,169,0.6);border-radius:14px;padding:16px 18px;margin-top:18px;color:#3a2f28;display:flex;flex-direction:column;align-items:center;gap:6px">
+    <div class="event-photo" style="background-image:url('${imgSrc}');background-size:cover;background-position:center;border-radius:22px;overflow:hidden">
+      <div class="im-event-poster__venue" style="background-color: rgba(255,255,255,0.4);border: 1px solid rgba(231,201,169,0.6);border-radius:14px;padding:16px 18px;margin-top:18px;color:#3a2f28;display:flex;flex-direction:column;align-items:center;gap:6px;position:absolute;left:18px;right:18px;bottom:18px">
         <h3 class="im-event-poster__name" style="font-size:34px;font-family:'Great Vibes',cursive;font-weight:400;color:#3a2f28;margin:0">${name}</h3>
         <div class="event-date" style="color:#3a2f28;font-size:12px;letter-spacing:.18em;text-transform:uppercase">${date}</div>
         <div class="event-time" style="color:#3a2f28;font-size:16px;margin-top:4px;font-style:italic">${time}</div>
       </div>
-    </div>`;
+    </div>
+    <div class="event-content"></div>`;
   ev.append(a)
 });
 const scrollRevealTargets=document.querySelectorAll('#welcome .ornament,#welcome p,.couple .section-head,.profiles,.date-section .section-head,.date-grid,.countdown h2,.countdown-divider,.clock,.count-note,.gallery .section-head,.gallery-showcase,.gallery-nav,.functions .section-head,.venue-head,.venue-image,.venue-copy,.quote,.footer');
@@ -290,6 +292,16 @@ invitationVideo.addEventListener('ended',()=>{videoIntro.classList.add('is-closi
     ctx.globalCompositeOperation = 'destination-out';
   }
   resizeAndDraw();
+  // ensure proper sizing on mobile after layout settles
+  requestAnimationFrame(resizeAndDraw);
+  setTimeout(resizeAndDraw, 120);
+  // re-measure when element becomes visible (fixes cases where layout not settled on mobile)
+  try {
+    const visObserver = new IntersectionObserver((entries, obs) => { if (entries[0] && entries[0].isIntersecting) { resizeAndDraw(); obs.disconnect(); } }, { threshold: 0.05 });
+    visObserver.observe(canvas);
+  } catch(e) {
+    /* IntersectionObserver not available — skip */
+  }
   let scratching = false;
   const point = e => { const r = canvas.getBoundingClientRect(); const ratio = getDpr(); return [(e.clientX - r.left) * ratio, (e.clientY - r.top) * ratio]; };
   canvas.addEventListener('pointerdown', e => { scratching = true; canvas.setPointerCapture(e.pointerId); const [x,y] = point(e); ctx.beginPath(); ctx.arc(x,y,14,0,Math.PI*2); ctx.fill(); });
