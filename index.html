@@ -267,48 +267,123 @@ if(startVideoInvite && !startVideoInvite._ptrFallback){
 }
 invitationVideo.addEventListener('ended',()=>{videoIntro.classList.add('is-closing');document.body.classList.remove('intro-pending');window.scrollTo(0,0);setTimeout(()=>videoIntro.remove(),600)});syncAudioButton();function initHeartScratch(canvas){
   const ctx = canvas.getContext('2d');
-  const getDpr = () => window.devicePixelRatio || 1;
-  function resizeAndDraw(){
+  const getDpr = () => Math.max(1, window.devicePixelRatio || 1);
+  let scratching = false;
+  let scratchReady = false;
+
+  const getPoint = e => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  };
+
+  function redrawCover(){
     const rect = canvas.getBoundingClientRect();
     const ratio = getDpr();
-    const w = Math.max(1, Math.round(rect.width * ratio));
-    const h = Math.max(1, Math.round(rect.height * ratio));
-    if (canvas.width !== w || canvas.height !== h) {
-      canvas.width = w;
-      canvas.height = h;
+    const cssW = Math.max(1, rect.width);
+    const cssH = Math.max(1, rect.height);
+    const dprW = Math.max(1, Math.round(cssW * ratio));
+    const dprH = Math.max(1, Math.round(cssH * ratio));
+
+    if (canvas.width !== dprW || canvas.height !== dprH) {
+      canvas.width = dprW;
+      canvas.height = dprH;
     }
-    // use device pixel ratio scaling so drawings remain crisp
-    ctx.setTransform(ratio,0,0,ratio,0,0);
-    const cssW = canvas.width / ratio;
-    const cssH = canvas.height / ratio;
-    const cover = ctx.createLinearGradient(0,0,cssW,cssH);
-    cover.addColorStop(0,'#e9d7ac');cover.addColorStop(.5,'#d9bd83');cover.addColorStop(1,'#c7a66d');
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = cover; ctx.fillRect(0,0,cssW,cssH);
+
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.globalCompositeOperation = 'source-over';
+
+    const cover = ctx.createLinearGradient(0, 0, cssW, cssH);
+    cover.addColorStop(0, '#e9d7ac');
+    cover.addColorStop(0.5, '#d9bd83');
+    cover.addColorStop(1, '#c7a66d');
+    ctx.fillStyle = cover;
+    ctx.fillRect(0, 0, cssW, cssH);
+
     ctx.fillStyle = '#8a7060';
-    ctx.font = '500 ' + Math.max(10, Math.round(cssW*0.08)) + 'px Arial, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(canvas.dataset.scratchText || 'Scratch me', cssW/2, cssH/2);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '600 ' + Math.max(12, Math.round(Math.min(cssW, cssH) * 0.14)) + 'px Arial, sans-serif';
+    ctx.fillText(canvas.dataset.scratchText || 'Scratch me', cssW / 2, cssH / 2);
+
     ctx.globalCompositeOperation = 'destination-out';
+    scratchReady = true;
   }
-  resizeAndDraw();
-  // ensure proper sizing on mobile after layout settles
-  requestAnimationFrame(resizeAndDraw);
-  setTimeout(resizeAndDraw, 120);
-  // re-measure when element becomes visible (fixes cases where layout not settled on mobile)
-  try {
-    const visObserver = new IntersectionObserver((entries, obs) => { if (entries[0] && entries[0].isIntersecting) { resizeAndDraw(); obs.disconnect(); } }, { threshold: 0.05 });
-    visObserver.observe(canvas);
-  } catch(e) {
-    /* IntersectionObserver not available — skip */
+
+  function paintAt(x, y, radius = 20) {
+    if (!scratchReady) return;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
   }
-  let scratching = false;
-  const point = e => { const r = canvas.getBoundingClientRect(); const ratio = getDpr(); return [(e.clientX - r.left) * ratio, (e.clientY - r.top) * ratio]; };
-  canvas.addEventListener('pointerdown', e => { scratching = true; canvas.setPointerCapture(e.pointerId); const [x,y] = point(e); ctx.beginPath(); ctx.arc(x,y,14,0,Math.PI*2); ctx.fill(); });
-  canvas.addEventListener('pointermove', e => { if (!scratching) return; const [x,y] = point(e); ctx.beginPath(); ctx.arc(x,y,14,0,Math.PI*2); ctx.fill(); });
-  const finish = () => { if (!scratching) return; scratching = false; try { const data = ctx.getImageData(0,0,canvas.width,canvas.height).data; let clear = 0; for (let i = 3; i < data.length; i += 4) if (data[i] < 32) clear++; if (clear / (data.length/4) > .38) { canvas.style.transition = 'opacity .3s ease'; canvas.style.opacity = '0'; canvas.style.pointerEvents = 'none'; } } catch (_){ } };
-  canvas.addEventListener('pointerup', finish); canvas.addEventListener('pointercancel', finish);
-  window.addEventListener('resize', resizeAndDraw); window.addEventListener('orientationchange', resizeAndDraw);
+
+  function finish(){
+    if (!scratching) return;
+    scratching = false;
+    try {
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let transparentPixels = 0;
+      let totalPixels = 0;
+
+      for (let i = 3; i < data.length; i += 4) {
+        totalPixels++;
+        if (data[i] < 32) transparentPixels++;
+      }
+
+      if (totalPixels && (transparentPixels / totalPixels) > 0.2) {
+        canvas.style.transition = 'opacity .3s ease';
+        canvas.style.opacity = '0';
+        canvas.style.pointerEvents = 'none';
+      }
+    } catch (_){ }
+  }
+
+  redrawCover();
+
+  requestAnimationFrame(redrawCover);
+  setTimeout(redrawCover, 120);
+
+  canvas.addEventListener('pointerdown', e => {
+    scratching = true;
+    const point = getPoint(e);
+    paintAt(point.x, point.y, 26);
+    try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+  }, { passive: false });
+
+  canvas.addEventListener('pointermove', e => {
+    if (!scratching) return;
+    const point = getPoint(e);
+    paintAt(point.x, point.y, 26);
+  }, { passive: false });
+
+  canvas.addEventListener('pointerup', finish, { passive: false });
+  canvas.addEventListener('pointercancel', finish, { passive: false });
+  canvas.addEventListener('pointerleave', () => { if (scratching) finish(); }, { passive: false });
+
+  canvas.addEventListener('touchstart', e => {
+    scratching = true;
+    const touch = e.touches[0];
+    const point = getPoint(touch);
+    paintAt(point.x, point.y, 26);
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', e => {
+    if (!scratching) return;
+    const touch = e.touches[0];
+    const point = getPoint(touch);
+    paintAt(point.x, point.y, 26);
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', () => { finish(); }, { passive: false });
+  canvas.addEventListener('touchcancel', () => { finish(); }, { passive: false });
+
+  window.addEventListener('resize', redrawCover, { passive: true });
+  window.addEventListener('orientationchange', redrawCover, { passive: true });
 }document.querySelectorAll('.im-heart-scratch__canvas').forEach(initHeartScratch);const cursorBackdrop=document.createElement('div');cursorBackdrop.className='cursor-backdrop';cursorBackdrop.setAttribute('aria-hidden','true');document.body.append(cursorBackdrop);window.addEventListener('pointermove',event=>{if(event.pointerType==='touch')return;cursorBackdrop.style.left=`${event.clientX}px`;cursorBackdrop.style.top=`${event.clientY}px`;document.body.classList.add('cursor-ready')},{passive:true});window.addEventListener('pointerleave',()=>document.body.classList.remove('cursor-ready'));</script></body></html>
 
 
